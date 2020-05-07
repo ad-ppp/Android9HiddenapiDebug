@@ -1,3 +1,8 @@
+## MOCK 360-APM 
+具体查看： MockApm.java文件
+- 模拟 360APM hook，currentActivityThread 的 mInstrumentation。包装此对象，并设置新的Instrumentation对象到currentActivityThread中。
+
+
 ## Hidden api访问测试
 - [Android 9.0 非sdk接口限制。](https://developer.android.com/distribute/best-practices/develop/restrictions-non-sdk-interfaces)
 - [Android 11.0 非sdk接口限制也要来啦](https://developer.android.com/preview/non-sdk-11)

@@ -1,6 +1,7 @@
 package com.jacky.android9.hidden;
 
 import android.app.Application;
+import android.app.Instrumentation;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -18,6 +19,14 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         reflectHideFieldTest();
+        reflectInstrumentation();
+    }
+
+    private void reflectInstrumentation() {
+        final Instrumentation mInstrumentation = reflectObject(this, "mInstrumentation");
+        if (mInstrumentation != null) {
+            mInstrumentation.callActivityOnCreate(this, null);
+        }
     }
 
     /**
@@ -33,7 +42,6 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
-
 
     private <T> T reflectObject(Object instance, String name) {
         try {
