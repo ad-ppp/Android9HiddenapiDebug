@@ -9,7 +9,7 @@
 
 ---
 
-## Logs
+Logs
 ```
 2020-05-07 13:38:32.452 22883-22883/? I/android9.hidde: Not late-enabling -Xcheck:jni (already on)
 2020-05-07 13:38:32.470 22883-22883/? W/android9.hidde: Unexpected CPU variant for X86 using defaults: x86

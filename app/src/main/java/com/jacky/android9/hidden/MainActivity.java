@@ -1,5 +1,6 @@
 package com.jacky.android9.hidden;
 
+import android.app.Activity;
 import android.app.Application;
 import android.app.Instrumentation;
 import android.os.Bundle;
@@ -7,8 +8,9 @@ import android.util.Log;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.jacky.android9.hidden.util.ReflectUtils;
+
 import java.io.File;
-import java.lang.reflect.Field;
 
 public class MainActivity extends AppCompatActivity {
     private static final String tag = "MainActivity";
@@ -23,9 +25,16 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void reflectInstrumentation() {
-        final Instrumentation mInstrumentation = reflectObject(this, "mInstrumentation");
-        if (mInstrumentation != null) {
-            mInstrumentation.callActivityOnCreate(this, null);
+        final Instrumentation mInstrumentation;
+        try {
+            mInstrumentation = ReflectUtils
+                .get(Activity.class, "mInstrumentation", this);
+
+            if (mInstrumentation != null) {
+                mInstrumentation.callActivityOnCreate(this, null);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -34,23 +43,17 @@ public class MainActivity extends AppCompatActivity {
      */
     private void reflectHideFieldTest() {
         final Application application = getApplication();
-        final Object mLoadApk = reflectObject(application, "mLoadApk");
-        if (mLoadApk != null) {
-            final File file = reflectObject(mLoadApk, "mDataDirFile");
-            if (file != null) {
-                Log.d(tag, "LoadApk,mDataDirFile:" + file.getAbsolutePath());
-            }
-        }
-    }
-
-    private <T> T reflectObject(Object instance, String name) {
+        final Object mLoadApk;
         try {
-            Field field = instance.getClass().getDeclaredField(name);
-            field.setAccessible(true);
-            return (T) field.get(instance);
+            mLoadApk = ReflectUtils.get(Application.class, "mLoadApk", application);
+            if (mLoadApk != null) {
+                final File file = ReflectUtils.get(mLoadApk.getClass(), "mDataDirFile", mLoadApk);
+                if (file != null) {
+                    Log.d(tag, "LoadApk,mDataDirFile:" + file.getAbsolutePath());
+                }
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return null;
     }
 }
